@@ -1,0 +1,136 @@
+# template for "Guess the number" mini-project
+# input will come from buttons and an input field
+# all output for the game will be printed in the console
+
+# importing simple GUI
+import simplegui
+import random
+
+
+# initialize global variables used in your code
+
+generated_number = -1
+num_range = 100
+remaining_guess = -1
+
+
+# helper function to start and restart the game
+def new_game():
+   
+    if(num_range == 100):
+        # Regenrate the new number of range
+        range100()
+    else:
+        # Regenrate the new number of range
+        range1000()
+   
+
+    
+
+
+# define event handlers for control panel
+def range100():
+    ## Reset the global range
+    global num_range
+    num_range = 100
+    
+    #print "\n"
+    print "New game. Range is from 0 to ",num_range
+    print "\n"
+    # Regenrate the new number
+    global generated_number
+    # button that changes range to range [0,100) and restarts
+    generated_number = random.randrange(0,100);
+    
+    # Reset the turn counter. Guessing chance for 100 is Seven
+    global remaining_guess
+    remaining_guess = 7
+    
+    
+
+def range1000():
+    ## Reset the global range
+    global num_range
+    num_range = 1000
+    
+    #print "\n"
+    print "New game. Range is from 0 to ",num_range
+    print "\n"
+    
+    # Regenrate the new number
+    global generated_number
+    # button that changes range to range [0,100) and restarts
+    generated_number = random.randrange(0,1000);
+    
+    # Reset the turn counter. Guessing chance for 1000 is Ten
+    global remaining_guess
+    remaining_guess = 10
+    
+    
+    
+def input_guess(guess):
+    # main game logic goes here	
+    print "Guess was " +guess
+    
+    ## Decrease remaining_guess by one in each turn.
+    global remaining_guess
+    remaining_guess = remaining_guess - 1
+    print "Number of remaining guesses is ",remaining_guess
+    
+        
+    # convert guess string to integer
+    guess_int = int(guess)
+    
+    global generated_number
+    
+    ## Check if the user guess is out of range.
+    if(guess_int >= num_range):
+        print "Your guess ",generated_number, " is out of range!!!"
+        print "It should be less than ",num_range
+        print "Resatring Game !!!"
+        print "\n"
+        ## Re start the game
+        new_game()
+    
+    ## Check if the user is out of turn or not.
+    elif(remaining_guess < 1):
+        # If user running out of the turn.
+        # Reset the counter
+        # regenrate the new number
+        print "You are out of guesses. The number was ",generated_number
+        print "\n"
+        ## Re start the game
+        new_game()
+    ## Check the generated number is greater or lower.
+    elif(guess_int > generated_number ):
+        print "Higher !"
+    elif (guess_int < generated_number ):
+        print "Lower !"
+    else:
+        # Number match the guess so we print the message. 
+        
+        print "Correct!"
+        print "\n"
+        # Restart the game.
+        new_game()
+        
+    print "\n"
+        
+        
+  
+
+    
+# create frame
+
+frame = simplegui.create_frame('Guess The Number', 400, 400)
+# register event handlers for control elements
+button1 = frame.add_button('Range [0,100)', range100,200)
+button2 = frame.add_button('Range [0,1000)', range1000, 200)
+inp = frame.add_input('Enter a Guess', input_guess,200)
+
+# call new_game and start frame
+new_game()
+
+
+# always remember to check your completed program against the grading rubric
+# http://www.codeskulptor.org/#user21_T3nCZgMIPpBPxJD.py
